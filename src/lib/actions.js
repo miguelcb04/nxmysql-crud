@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 
 export async function getArticulos() {
   try {
-    const results = await db.query('select * from articulos');
+    const results = await db.query('select * from posts');
     // console.log(results);
     return results;
   } catch (error) {
@@ -16,12 +16,18 @@ export async function getArticulos() {
 
 export async function newArticulo(formData) {
   try {
-    const nombre = formData.get('nombre');
-    const descripcion = formData.get('descripcion');
-    const precio = formData.get('precio');
+    const author = formData.get('author');
+    const title = formData.get('title');
+    const image = formData.get('image');
+    const post = formData.get('post');
+    const created = formData.get('created');
+    const modified = formData.get('modified');
+    const is_draft = formData.get('is_draft');
+    const slug = formData.get('slug');
+    const views = formData.get('views');
 
-    const query = 'insert into articulos(nombre,descripcion,precio) values (?, ?, ?)';
-    const results = await db.query(query, [nombre, descripcion, precio]);
+    const query = 'insert into posts(author,title,image,post,created,modified,is_draft,slug,views) values (?, ?, ?, ?, ?, ?, ? ,?, ?)';
+    const results = await db.query(query, [author, title, image,post ,created ,modified ,is_draft,slug ,views ]);
     console.log(results);
   } catch (error) {
     console.log(error);
@@ -32,13 +38,19 @@ export async function newArticulo(formData) {
 
 export async function editArticulo(formData) {
   const id = formData.get('id')
-  const nombre = formData.get('nombre')
-  const descripcion = formData.get('descripcion')
-  const precio = formData.get('precio')
+  const author = formData.get('author');
+  const title = formData.get('title');
+  const image = formData.get('image');
+  const post = formData.get('post');
+  const created = formData.get('created');
+  const modified = formData.get('modified');
+  const is_draft = formData.get('is_draft');
+  const slug = formData.get('slug');
+  const views = formData.get('views');
 
   try {
-    const query = 'update articulos set ? where id = ? ';
-    const results = await db.query(query, [{nombre, descripcion, precio}, id]);
+    const query = 'update posts set ? where id = ? ';
+    const results = await db.query(query, [{author, title, image,post ,created ,modified ,is_draft,slug ,views}, id]);
     console.log(results);
   } catch (error) {
     console.log(error);
@@ -50,67 +62,11 @@ export async function deleteArticulo(formData) {
   try {
     const id = formData.get('id');
 
-    const query = 'delete from articulos where id = ?';
+    const query = 'delete from posts where id = ?';
     const results = await db.query(query, [id]);
     console.log(results);
   } catch (error) {
     console.log(error);
   }
   redirect('/articulos');
-}
-
-
-export async function getProveedores() {
-  try {
-    const results = await db.query('select * from proveedores');
-    // console.log(results);
-    return results;
-  } catch (error) {
-    // console.log(error);  
-    return null;    
-  }
-}
-
-
-export async function newProveedor(formData) {
-  try {
-    const nombre = formData.get('nombre');
-    const telefono = formData.get('telefono');
-
-    const query = 'insert into proveedores(nombre,telefono) values (?, ?)';
-    const results = await db.query(query, [nombre, telefono]);
-    console.log(results);
-  } catch (error) {
-    console.log(error);
-  }
-  redirect('/proveedores');
-}
-
-
-export async function editProveedor(formData) {
-  const id = formData.get('id')
-  const nombre = formData.get('nombre')
-  const telefono = formData.get('telefono')
-
-  try {
-    const query = 'update proveedores set ? where id = ? ';
-    const results = await db.query(query, [{nombre, telefono}, id]);
-    console.log(results);
-  } catch (error) {
-    console.log(error);
-  }
-  redirect('/proveedores');
-}
-
-export async function deleteProveedores(formData) {
-  try {
-    const id = formData.get('id');
-
-    const query = 'delete from proveedores where id = ?';
-    const results = await db.query(query, [id]);
-    console.log(results);
-  } catch (error) {
-    console.log(error);
-  }
-  redirect('/proveedores');
 }
